@@ -15,19 +15,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/photos")
+@RequestMapping(path = "/api/photos")
 public class PhotoController {
     private final PhotoService photoService;
     private final PhotoMapper photoMapper;
 
     @PostMapping
-    public PhotoDto uploadPhoto(@RequestParam("file") MultipartFile file){
+    public PhotoDto uploadPhoto(@RequestParam("file")MultipartFile file) {
         Photo savedPhoto = photoService.uploadPhoto(file);
         return photoMapper.toDto(savedPhoto);
     }
 
-    @GetMapping(path = "/{id: .+}")
-    public ResponseEntity<Resource>  getPhoto(@PathVariable String id) {
+    @GetMapping(path = "/{id:.+}")
+    public ResponseEntity<Resource> getPhoto(@PathVariable String id) {
         return photoService.getPhotoAsResource(id).map(photo ->
                 ResponseEntity.ok()
                         .contentType(

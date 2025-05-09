@@ -46,39 +46,39 @@ import org.springframework.web.bind.annotation.RestController;
 public class ErrorController {
 
     @ExceptionHandler(StorageException.class)
-    public ResponseEntity<ErrorDto> handleStorageException(StorageException e) {
-        log.error("Storage exception: {}", e);
+    public ResponseEntity<ErrorDto> handleStorageException(StorageException ex) {
+        log.error("Caught StorageException", ex);
 
-    ErrorDto errorDto = ErrorDto.builder()
+        ErrorDto errorDto = ErrorDto.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message("Unable to save or retrieve file")
+                .message("Unable to save or retrieve resources at this time")
                 .build();
 
         return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(BaseException.class)
-    public ResponseEntity<ErrorDto> handleBaseException(BaseException e) {
-        log.error("Base exception: {}", e);
+    public ResponseEntity<ErrorDto> handleBaseException(BaseException ex) {
+        log.error("Caught BaseException", ex);
 
-        ErrorDto errorDto = ErrorDto.builder()
+        ErrorDto error = ErrorDto.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message("An unexpected error")
+                .message("An unexpected error occurred")
                 .build();
 
-        return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDto> handleException(BaseException e) {
         log.error("Base exception: {}", e);
 
-        ErrorDto errorDto = ErrorDto.builder()
+        ErrorDto error = ErrorDto.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message("An unexpected error")
+                .message("An unexpected error occurred")
                 .build();
 
-        return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
