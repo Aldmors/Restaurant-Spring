@@ -20,6 +20,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
+/**
+ * Service class for handling file storage operations using the local file system.
+ * This class provides functionality to store and retrieve files as resources.
+ * It also ensures file system initialization and validates file storage paths.
+ *
+ * This class implements the {@link StorageService} interface.
+ */
 @Service
 @Slf4j
 public class FileSystemStorageService implements StorageService {
