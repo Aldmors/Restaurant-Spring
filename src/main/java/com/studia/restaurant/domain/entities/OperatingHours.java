@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+
 public class OperatingHours {
     @Field(type = FieldType.Nested)
     private TimeRange monday;
