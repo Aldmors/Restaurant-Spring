@@ -14,5 +14,4 @@ import java.time.LocalDateTime;
 public class PhotoDto {
     private String url;
     private LocalDateTime uploadDate;
-
 }

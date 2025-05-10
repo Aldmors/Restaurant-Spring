@@ -18,17 +18,8 @@ public class PhotoServiceImpl implements PhotoService {
 
     private final StorageService storageService;
 
-
-    /**
-     * Uploads a photo to the storage system and returns a {@link Photo} object containing
-     * information about the uploaded photo, such as its URL and upload timestamp.
-     *
-     * @param file the {@link MultipartFile} representing the photo to be uploaded
-     * @return a {@link Photo} object containing details of the uploaded photo
-     */
     @Override
     public Photo uploadPhoto(MultipartFile file) {
-
         String photoId = UUID.randomUUID().toString();
         String url = storageService.store(file, photoId);
 
@@ -42,4 +33,5 @@ public class PhotoServiceImpl implements PhotoService {
     public Optional<Resource> getPhotoAsResource(String id) {
         return storageService.loadAsResource(id);
     }
+
 }

@@ -1,15 +1,9 @@
 package com.studia.restaurant.domain.dtos;
 
-import com.studia.restaurant.domain.entities.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.GeoPointField;
-import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +18,7 @@ public class RestaurantDto {
 
     private String name;
 
-    private String cusineType;
+    private String cuisineType;
 
     private String contactInformation;
 

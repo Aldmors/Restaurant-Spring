@@ -8,6 +8,5 @@ import java.util.Optional;
 
 public interface PhotoService {
     Photo uploadPhoto(MultipartFile file);
-
     Optional<Resource> getPhotoAsResource(String id);
 }

@@ -16,8 +16,8 @@ import java.util.List;
 public class RestaurantCreateUpdateRequest {
     private String name;
     private String cuisineType;
-    private Address address;
     private String contactInformation;
+    private Address address;
     private OperatingHours operatingHours;
-    private List<String> photoItds;
+    private List<String> photoIds;
 }

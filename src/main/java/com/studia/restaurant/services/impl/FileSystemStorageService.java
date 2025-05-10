@@ -20,13 +20,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
-/**
- * Service class for handling file storage operations using the local file system.
- * This class provides functionality to store and retrieve files as resources.
- * It also ensures file system initialization and validates file storage paths.
- *
- * This class implements the {@link StorageService} interface.
- */
 @Service
 @Slf4j
 public class FileSystemStorageService implements StorageService {
@@ -34,11 +27,10 @@ public class FileSystemStorageService implements StorageService {
     @Value("${app.storage.location:uploads}")
     private String storageLocation;
 
-
     private Path rootLocation;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         rootLocation = Paths.get(storageLocation);
         try {
             Files.createDirectories(rootLocation);
@@ -49,10 +41,9 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public String store(MultipartFile file, String filename) {
-
         try {
             if (file.isEmpty()) {
-                throw new StorageException("Failed to store empty file");
+                throw new StorageException("Cannot save an empty file");
             }
 
             String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
@@ -64,7 +55,7 @@ public class FileSystemStorageService implements StorageService {
                     .toAbsolutePath();
 
             if (!destinationFile.getParent().equals(rootLocation.toAbsolutePath())) {
-                throw new StorageException("Cannot store file outside current directory");
+                throw new StorageException("Cannot store file outside specified directory");
             }
 
             try (InputStream inputStream = file.getInputStream()) {
@@ -72,29 +63,29 @@ public class FileSystemStorageService implements StorageService {
             }
 
             return finalFileName;
-        } catch (IOException e) {
+
+        } catch(IOException e) {
             throw new StorageException("Failed to store file", e);
         }
+
     }
 
     @Override
     public Optional<Resource> loadAsResource(String filename) {
-        Path file = rootLocation.resolve(filename);
-        Resource resource = null;
         try {
-            resource = new UrlResource(file.toUri());
+            Path file = rootLocation.resolve(filename);
 
+            Resource resource = new UrlResource(file.toUri());
 
             if (resource.exists() || resource.isReadable()) {
                 return Optional.of(resource);
             } else {
                 return Optional.empty();
             }
-        } catch (MalformedURLException e) {
-            log.warn("Could not read file: %s" .formatted(filename), e);
+        } catch(MalformedURLException e) {
+            log.warn("Could not read file: %s".formatted(filename), e);
             return Optional.empty();
         }
     }
+
 }
-
-

@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@Builder
 @NoArgsConstructor
+@Builder
 public class GeoLocation {
-    private double latitude;
-    private double longitude;
-
+    private Double latitude;
+    private Double longitude;
 }

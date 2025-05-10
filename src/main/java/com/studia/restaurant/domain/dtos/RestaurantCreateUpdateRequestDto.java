@@ -1,7 +1,5 @@
 package com.studia.restaurant.domain.dtos;
 
-import com.studia.restaurant.domain.entities.Address;
-import com.studia.restaurant.domain.entities.OperatingHours;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -18,20 +16,21 @@ import java.util.List;
 @Builder
 public class RestaurantCreateUpdateRequestDto {
 
-
-    @NotBlank(message = "Restaurant name cannot be blank")
+    @NotBlank(message = "Restaurant name is required")
     private String name;
-    @NotBlank(message = "Cuisine type cannot be blank")
+
+    @NotBlank(message = "Cuisine type is required")
     private String cuisineType;
+
+    @NotBlank(message = "Contact information is required")
+    private String contactInformation;
 
     @Valid
     private AddressDto address;
 
-    @NotBlank(message = "Contact information cannot be blank")
-    private String contactInformation;
-
     @Valid
     private OperatingHoursDto operatingHours;
+
     @Size(min = 1, message = "At least one photo ID is required")
-    private List<String> photoItds;
+    private List<String> photoIds;
 }

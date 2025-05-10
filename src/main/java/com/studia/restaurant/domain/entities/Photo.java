@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.DateFormat;
-
 
 import java.time.LocalDateTime;
 
@@ -16,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class Photo {
+
     @Field(type = FieldType.Keyword)
     private String url;
 

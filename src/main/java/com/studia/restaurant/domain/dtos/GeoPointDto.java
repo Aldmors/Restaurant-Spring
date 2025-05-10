@@ -14,5 +14,4 @@ public class GeoPointDto {
     private Double latitude;
 
     private Double longitude;
-
 }

@@ -1,6 +1,7 @@
 package com.studia.restaurant.exceptions;
 
 public class StorageException extends BaseException {
+
     public StorageException() {
     }
 

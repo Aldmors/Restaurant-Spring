@@ -1,31 +1,35 @@
 package com.studia.restaurant.domain.dtos;
 
-import com.studia.restaurant.domain.entities.TimeRange;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class OperatingHoursDto {
-@Valid
+
+    @Valid
     private TimeRangeDto monday;
-@Valid
+
+    @Valid
     private TimeRangeDto tuesday;
-@Valid
+
+    @Valid
     private TimeRangeDto wednesday;
-@Valid
+
+    @Valid
     private TimeRangeDto thursday;
-@Valid
+
+    @Valid
     private TimeRangeDto friday;
-@Valid
+
+    @Valid
     private TimeRangeDto saturday;
-@Valid
+
+    @Valid
     private TimeRangeDto sunday;
 }

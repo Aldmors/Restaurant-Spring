@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/photos")
 public class PhotoController {
+
     private final PhotoService photoService;
     private final PhotoMapper photoMapper;
 

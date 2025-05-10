@@ -1,6 +1,5 @@
 package com.studia.restaurant.domain.entities;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +28,7 @@ public class Restaurant {
     private String name;
 
     @Field(type = FieldType.Text)
-    private String cusineType;
+    private String cuisineType;
 
     @Field(type = FieldType.Keyword)
     private String contactInformation;
