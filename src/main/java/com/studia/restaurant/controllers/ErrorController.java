@@ -21,17 +21,18 @@ public class ErrorController {
     public ResponseEntity<ErrorDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         log.error("Caught MethodArgumentNotValidException", ex);
 
-        String errorMessage = ex
+       String errorMessage = ex
                 .getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining(",  "));
 
         ErrorDto errorDto = ErrorDto.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(errorMessage)
                 .build();
+
 
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
