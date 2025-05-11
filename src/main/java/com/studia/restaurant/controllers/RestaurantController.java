@@ -49,4 +49,22 @@ public class RestaurantController {
         );
         return searchResults.map(restaurantMapper::toRestaurantSummaryDto);
     }
+
+    @GetMapping(path = "/{restaurant_id}")
+    public ResponseEntity<RestaurantDto> getRestaurant(@PathVariable("restaurant_id") String restaurant_id) {
+        return restaurantService.getRestaurant(restaurant_id)
+                .map(restaurant -> ResponseEntity.ok(restaurantMapper.toRestaurantDto(restaurant)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping(path = "/{restaurant_id}")
+    public ResponseEntity<RestaurantDto> updateRestaurant(
+            @PathVariable("restaurant_id") String restaurant_id),
+            @Valid @RequestBody RestaurantCreateUpdateRequestDto requestDto
+    ){
+    RestaurantCreateUpdateRequest request = restaurantMapper
+            .toRestaurantCreateUpdateRequest(requestDto);
+
+    Restaurant updateRestaurant = restaurantService.updateRestaurant(restaurant_id, request);
+}
 }
