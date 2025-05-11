@@ -1,6 +1,7 @@
 package com.studia.restaurant.controllers;
 import com.studia.restaurant.domain.dtos.ErrorDto;
 import com.studia.restaurant.exceptions.BaseException;
+import com.studia.restaurant.exceptions.RestaurantNotFoundException;
 import com.studia.restaurant.exceptions.StorageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,19 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @Slf4j
 public class ErrorController {
+
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleRestaurantNotFoundException(RestaurantNotFoundException e) {
+        log.error("Restaurant not found", e);
+
+        ErrorDto errorDto = new ErrorDto().builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message("The specified restaurant does not exist.")
+                .build();
+
+        return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
