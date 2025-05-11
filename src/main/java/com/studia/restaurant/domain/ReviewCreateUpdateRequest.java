@@ -15,5 +15,5 @@ public class ReviewCreateUpdateRequest {
 
     private String content;
     private  Integer rating;
-    private List<String> photosIds;
+    private List<String> photoIds;
 }

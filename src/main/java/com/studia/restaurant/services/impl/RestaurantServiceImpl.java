@@ -60,7 +60,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         Float searchMinRating = null == minRating ? 0f : minRating;
 
-        if(null != query && !query.trim().isEmpty()) {
+        if(!query.trim().isEmpty()) {
             return restaurantRepository.findByQueryAndMinRating(query, searchMinRating, pageable);
         }
 
