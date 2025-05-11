@@ -1,7 +1,5 @@
 package com.studia.restaurant.exceptions;
 
-import co.elastic.clients.elasticsearch.xpack.usage.Base;
-
 public class RestaurantNotFoundException extends BaseException {
     public RestaurantNotFoundException() {
     }

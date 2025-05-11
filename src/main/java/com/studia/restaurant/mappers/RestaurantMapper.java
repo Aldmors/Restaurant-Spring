@@ -23,7 +23,7 @@ public interface RestaurantMapper {
     RestaurantDto toRestaurantDto(Restaurant restaurant);
 
     @Mapping(source = "reviews", target = "totalReviews", qualifiedByName = "populateTotalReviews")
-    RestaurantSummaryDto toRestaurantSummaryDto(Restaurant restaurant);
+    RestaurantSummaryDto toSummaryDto(Restaurant restaurant);
 
     @Named("populateTotalReviews")
     default Integer populateTotalReviews(List<Review> reviews){

@@ -9,12 +9,41 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RestaurantRepository extends ElasticsearchRepository<Restaurant, String> {
+
     Page<Restaurant> findByAverageRatingGreaterThanEqual(Float minRating, Pageable pageable);
 
-//    TODO: Copy from example YT 3:08:07
-    @Query("{}")
+    @Query("{" +
+            "  \"bool\": {" +
+            "    \"must\": [" +
+            "      {\"range\": {\"averageRating\": {\"gte\": ?1}}}" +
+            "    ]," +
+            "    \"should\": [" +
+            "      {\"fuzzy\": {\"name\": {\"value\": \"?0\", \"fuzziness\": \"AUTO\"}}}," +
+            "      {\"fuzzy\": {\"cuisineType\": {\"value\": \"?0\", \"fuzziness\": \"AUTO\"}}}" +
+            "    ]," +
+            "    \"minimum_should_match\": 1" +
+            "  }" +
+            "}" +
+            "}")
     Page<Restaurant> findByQueryAndMinRating(String query, Float minRating, Pageable pageable);
-    //    TODO: Copy from example YT 3:08:07
-    @Query("{}")
-    Page<Restaurant> findByLocationNear(Float latitude, Float longitude, Float radius, Pageable pageable);
+
+    @Query("{" +
+            "  \"bool\": {" +
+            "    \"must\": [" +
+            "      {\"geo_distance\": {" +
+            "        \"distance\": \"?2km\"," +
+            "        \"geoLocation\": {" +
+            "          \"lat\": ?0," +
+            "          \"lon\": ?1" +
+            "        }" +
+            "      }}" +
+            "    ]" +
+            "  }" +
+            "}")
+    Page<Restaurant> findByLocationNear(
+            Float latitude,
+            Float longitude,
+            Float radiusKm,
+            Pageable pageable);
+
 }

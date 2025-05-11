@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping(path = "/api/restaurants")
 @RequiredArgsConstructor
@@ -47,24 +48,37 @@ public class RestaurantController {
         Page<Restaurant> searchResults = restaurantService.searchRestaurants(
                 q, minRating, latitude, longitude, radius, PageRequest.of(page - 1, size)
         );
-        return searchResults.map(restaurantMapper::toRestaurantSummaryDto);
+
+        return searchResults.map(restaurantMapper::toSummaryDto);
     }
 
     @GetMapping(path = "/{restaurant_id}")
-    public ResponseEntity<RestaurantDto> getRestaurant(@PathVariable("restaurant_id") String restaurant_id) {
-        return restaurantService.getRestaurant(restaurant_id)
+    public ResponseEntity<RestaurantDto> getRestaurant(@PathVariable("restaurant_id") String restaurantId) {
+        return restaurantService.getRestaurant(restaurantId)
                 .map(restaurant -> ResponseEntity.ok(restaurantMapper.toRestaurantDto(restaurant)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping(path = "/{restaurant_id}")
+    @PutMapping(path = "/{restaurant_id}")
     public ResponseEntity<RestaurantDto> updateRestaurant(
-            @PathVariable("restaurant_id") String restaurant_id),
+            @PathVariable("restaurant_id") String restaurantId,
             @Valid @RequestBody RestaurantCreateUpdateRequestDto requestDto
-    ){
-    RestaurantCreateUpdateRequest request = restaurantMapper
-            .toRestaurantCreateUpdateRequest(requestDto);
+    ) {
+        RestaurantCreateUpdateRequest request = restaurantMapper
+                .toRestaurantCreateUpdateRequest(requestDto);
 
-    Restaurant updateRestaurant = restaurantService.updateRestaurant(restaurant_id, request);
+        Restaurant updatedRestaurant = restaurantService.updateRestaurant(restaurantId, request);
+
+        return ResponseEntity.ok(restaurantMapper.toRestaurantDto(updatedRestaurant));
+    }
+
+    @DeleteMapping(path = "/{restaurant_id}")
+    public ResponseEntity<Void> deleteRestaurant(@PathVariable("restaurant_id") String restaurantId) {
+        restaurantService.deleteRestaurant(restaurantId);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
 }
-}
+
