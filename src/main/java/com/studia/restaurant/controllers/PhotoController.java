@@ -21,12 +21,29 @@ public class PhotoController {
     private final PhotoService photoService;
     private final PhotoMapper photoMapper;
 
+    /**
+     * Handles the uploading of a photo.
+     * This method accepts a file, processes it, and returns a DTO containing the details
+     * of the uploaded photo.
+     *
+     * @param file the photo file to be uploaded
+     * @return a PhotoDto object containing the details of the uploaded photo, including its URL and upload date
+     */
     @PostMapping
     public PhotoDto uploadPhoto(@RequestParam("file")MultipartFile file) {
         Photo savedPhoto = photoService.uploadPhoto(file);
         return photoMapper.toDto(savedPhoto);
     }
 
+    /**
+     * Retrieves the photo resource with the specified identifier.
+     * The photo is returned as a downloadable or viewable resource.
+     * If the photo is not found, a 404 Not Found response is returned.
+     *
+     * @param id the identifier of the photo to be retrieved
+     * @return a ResponseEntity containing the photo as a Resource with appropriate headers,
+     *         or a 404 Not Found response if the photo does not exist
+     */
     @GetMapping(path = "/{id:.+}")
     public ResponseEntity<Resource> getPhoto(@PathVariable String id) {
         return photoService.getPhotoAsResource(id).map(photo ->

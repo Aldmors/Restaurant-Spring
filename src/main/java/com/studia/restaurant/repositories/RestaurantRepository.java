@@ -7,6 +7,11 @@ import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Repository interface for performing operations on the Restaurant entity in Elasticsearch.
+ * Extends ElasticsearchRepository to leverage indexing and search capabilities.
+ * Provides predefined methods for querying restaurants based on specific criteria.
+ */
 @Repository
 public interface RestaurantRepository extends ElasticsearchRepository<Restaurant, String> {
 

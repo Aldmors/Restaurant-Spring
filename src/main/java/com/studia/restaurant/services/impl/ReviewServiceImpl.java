@@ -20,12 +20,26 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the ReviewService interface, providing methods to manage reviews
+ * for restaurants including creating, updating, deleting, retrieving, and listing reviews.
+ * This service ensures validation of operations such as preventing multiple reviews
+ * by the same user for a restaurant and imposing restrictions on review edits.
+ * Utilizes a {@link RestaurantRepository} for database interactions.
+ */
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
     private final RestaurantRepository restaurantRepository;
 
+    /**
+     * Retrieves a specific review from a restaurant based on the review's unique identifier.
+     *
+     * @param reviewId   the unique identifier of the review to retrieve
+     * @param restaurant the restaurant object where the review is to be searched
+     * @return an {@code Optional} containing the matching {@code Review} if found, or an empty {@code Optional} if no such review exists in the restaurant
+     */
     private static Optional<Review> getReviewFromRestaurant(String reviewId, Restaurant restaurant) {
         return restaurant.getReviews()
                 .stream()
@@ -33,6 +47,20 @@ public class ReviewServiceImpl implements ReviewService {
                 .findFirst();
     }
 
+    /**
+     * Creates a new review for a specified restaurant by a given user. Validates if the user
+     * already has an existing review for the restaurant. If the user has already reviewed
+     * the restaurant, a {@code ReviewNotAllowedException} is thrown. The method also updates
+     * the average rating of the restaurant after adding the new review.
+     *
+     * @param author          The user who is creating the review.
+     * @param restaurantId    The unique identifier of the restaurant being reviewed.
+     * @param review          The request object containing the details of the review to be created,
+     *                        including content, rating, and photo URLs.
+     * @return The newly created {@code Review} object.
+     * @throws ReviewNotAllowedException If the user has already submitted a review for the specified restaurant.
+     * @throws RuntimeException          If the review creation fails for unknown reasons.
+     */
     @Override
     public Review createReview(User author, String restaurantId, ReviewCreateUpdateRequest review) {
         Restaurant restaurant = getRestaurantOrThrow(restaurantId);
@@ -74,6 +102,14 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new RuntimeException("Failed to create review"));
     }
 
+    /**
+     * Retrieves a paginated list of reviews for a specific restaurant, sorted based on the provided criteria.
+     * If no sorting criteria is specified, reviews are sorted by date posted in descending order.
+     *
+     * @param restaurantId the unique identifier of the restaurant for which reviews are to be listed
+     * @param pageable the pagination and sorting information, including page number, size, and sorting options
+     * @return a page of reviews for the specified restaurant, adhering to the provided pagination and sorting options
+     */
     @Override
     public Page<Review> listReviews(String restaurantId, Pageable pageable) {
         Restaurant restaurant = getRestaurantOrThrow(restaurantId);
@@ -108,12 +144,35 @@ public class ReviewServiceImpl implements ReviewService {
         return new PageImpl<>(reviews.subList(start, end), pageable, reviews.size());
     }
 
+    /**
+     * Retrieves a specific review for a given restaurant.
+     *
+     * @param restaurantId the ID of the restaurant where the review is located
+     * @param reviewId the ID of the review to retrieve
+     * @return an {@code Optional} containing the review if found, or an empty {@code Optional} if not found
+     */
     @Override
     public Optional<Review> getReview(String restaurantId, String reviewId) {
         Restaurant restaurant = getRestaurantOrThrow(restaurantId);
         return getReviewFromRestaurant(reviewId, restaurant);
     }
 
+    /**
+     * Updates an existing review for a given restaurant.
+     * Validates the user ownership and ensures the review is updated
+     * within the allowed time frame. Updates the restaurant's average rating
+     * after the review is modified.
+     *
+     * @param author the user attempting to update the review
+     * @param restaurantId the unique identifier of the restaurant
+     * @param reviewId the unique identifier of the review to be updated
+     * @param review the updated review data provided by the user
+     * @return the updated review after applying changes
+     * @throws ReviewNotAllowedException if the user is not the author of the review,
+     *         if the review does not exist, or if the review is being updated after
+     *         the allowed time frame
+     * @throws RestaurantNotFoundException if the restaurant with the specified ID does not exist
+     */
     @Override
     public Review updateReview(User author, String restaurantId, String reviewId, ReviewCreateUpdateRequest review) {
         Restaurant restaurant = getRestaurantOrThrow(restaurantId);
@@ -154,6 +213,14 @@ public class ReviewServiceImpl implements ReviewService {
         return existingReview;
     }
 
+    /**
+     * Deletes a review associated with a specific restaurant.
+     * The method removes the review with the given review ID from the restaurant's list of reviews,
+     * updates the restaurant's average rating, and persists the changes to the database.
+     *
+     * @param restaurantId the ID of the restaurant from which the review is to be deleted
+     * @param reviewId the ID of the review to be deleted
+     */
     @Override
     public void deleteReview(String restaurantId, String reviewId) {
         Restaurant restaurant = getRestaurantOrThrow(restaurantId);
@@ -168,6 +235,14 @@ public class ReviewServiceImpl implements ReviewService {
         restaurantRepository.save(restaurant);
     }
 
+    /**
+     * Retrieves a restaurant by its ID from the repository.
+     * If the restaurant is not found, throws a {@link RestaurantNotFoundException}.
+     *
+     * @param restaurantId the unique identifier of the restaurant to be retrieved
+     * @return the {@link Restaurant} corresponding to the given ID
+     * @throws RestaurantNotFoundException if no restaurant with the given ID is found
+     */
     private Restaurant getRestaurantOrThrow(String restaurantId) {
         return restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RestaurantNotFoundException(
@@ -177,6 +252,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
 
+    /**
+     * Updates the average rating of the given restaurant based on its reviews.
+     * If the restaurant has no reviews, the average rating is set to 0.
+     *
+     * @param restaurant the restaurant whose average rating is to be updated
+     */
     private void updateRestaurantAverageRating(Restaurant restaurant) {
         List<Review> reviews = restaurant.getReviews();
         if (reviews.isEmpty()) {
