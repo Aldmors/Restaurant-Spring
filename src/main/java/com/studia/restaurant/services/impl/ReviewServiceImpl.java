@@ -73,10 +73,12 @@ public class ReviewServiceImpl implements ReviewService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        List<Photo> photos = review.getPhotoIds().stream().map(url -> Photo.builder()
-                .url(url)
-                .uploadDate(now)
-                .build()).toList();
+        List<Photo> photos = review.getPhotoIds().stream().map(url -> {
+            return Photo.builder()
+                    .url(url)
+                    .uploadDate(now)
+                    .build();
+        }).toList();
 
         String reviewId = UUID.randomUUID().toString();
 

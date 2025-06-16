@@ -85,13 +85,13 @@ public class RestaurantServiceImpl implements RestaurantService {
      */
     @Override
     public Page<Restaurant> searchRestaurants(String query, Float minRating, Float latitude, Float longitude, Float radius, Pageable pageable) {
-        if(null != minRating && null == query || query.isEmpty()) {
+        if(null != minRating && (null == query || query.isEmpty())) {
             return restaurantRepository.findByAverageRatingGreaterThanEqual(minRating, pageable);
         }
 
         Float searchMinRating = null == minRating ? 0f : minRating;
 
-        if(!query.trim().isEmpty()) {
+        if(null != query && !query.trim().isEmpty()) {
             return restaurantRepository.findByQueryAndMinRating(query, searchMinRating, pageable);
         }
 
